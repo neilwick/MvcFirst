@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MvcFirst.Models;
 
 namespace MvcFirst
 {
@@ -24,6 +26,10 @@ namespace MvcFirst
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddDbContext<StoreGameContext>(opt => 
+                opt.UseSqlite(Configuration.GetConnectionString("StoreGameConnection"))
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +56,7 @@ namespace MvcFirst
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{count?}");
+                    pattern: "{controller=Games}/{action=Index}/{id?}");
             });
         }
     }
